@@ -1,0 +1,211 @@
+{% extends 'base.html' %} {% block content %}
+<!-- <div class="container"> -->
+<div id="loading">
+  <span>잠시만 기다려주세요..</span>
+</div>
+<div id="content">
+  <div class="list-group">
+    <div class="list-group-item">
+      <strong>건물 등록</strong>
+      <form
+        method="post"
+        class="my-3"
+        action="{{ url_for('upload.building') }}"
+        enctype="multipart/form-data"
+      >
+        <input
+          type="file"
+          id="upload_input1"
+          class="form-control"
+          name="file"
+        />
+        <input
+          id="btn_upload_building"
+          disabled
+          type="submit"
+          class="btn_upload my-1"
+          value="업로드"
+        />
+      </form>
+    </div>
+
+    <div class="list-group-item">
+      <div class="table-responsive">
+        <table class="table table-sm text-nowrap">
+          <thead class="table-light">
+            <tr class="thead-dark">
+              <th>번호</th>
+              <th>아이디</th>
+              <th>이름</th>
+              <th>설명</th>
+              <th>주소</th>
+              <th>높이</th>
+              <th>경도</th>
+              <th>위도</th>
+              <th>오브젝트</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% if building_list %} {% for building in building_list.items %}
+            <tr>
+              <td>{{ loop.index }}</td>
+              <td>{{ building.id }}</td>
+              <td>{{ building.name }}</td>
+              <td>{{ building.desc }}</td>
+              <td>{{ building.addr }}</td>
+              <td>{{ building.height }}</td>
+              <td>{{ building.xcoord }}</td>
+              <td>{{ building.ycoord }}</td>
+              <td>{{ building.object.id }}</td>
+            </tr>
+            {% endfor %} {% else %}
+            <tr>
+              <td colspan="3">자료가 없습니다.</td>
+            </tr>
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="b-example-divider"></div>
+  <div class="list-group">
+    <div class="list-group-item">
+      <strong>건물 폴리곤 등록</strong>
+      <form
+        method="post"
+        class="post-form my-3"
+        action="{{ url_for('upload.polygon') }}"
+        enctype="multipart/form-data"
+      >
+        <input type="file" class="form-control" name="file" />
+        <input
+          id="btn_upload_polygon"
+          disabled
+          type="submit"
+          class="btn_upload my-1"
+          value="업로드"
+        />
+      </form>
+    </div>
+
+    <div class="list-group-item">
+      <div class="table-responsive">
+        <table class="table table-sm text-nowrap">
+          <thead class="table-light">
+            <tr class="thead-dark">
+              <th>번호</th>
+              <th>건물 아이디</th>
+              <th>순서</th>
+              <th>넓이</th>
+              <th>좌표값</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% if polygon_list %} {% for polygon in polygon_list.items %}
+            <tr>
+              <td>{{ loop.index }}</td>
+              <td>{{ polygon.building_id }}</td>
+              <td>{{ polygon.seq }}</td>
+              <td>{{ polygon.area }}</td>
+              <td>{{ polygon.xycoords }}</td>
+            </tr>
+            {% endfor %} {% else %}
+            <tr>
+              <td colspan="3">자료가 없습니다.</td>
+            </tr>
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="b-example-divider"></div>
+  <div class="list-group">
+    <div class="list-group-item">
+      <strong>건물 오브젝트 등록</strong>
+      <form
+        id="form_upload_object"
+        method="post"
+        class="post-form my-3"
+        action="{{ url_for('upload.object') }}"
+        enctype="multipart/form-data"
+      >
+        <div class="mb-3">
+          <label for="building_id" class="form-label">건물 아이디</label>
+          <input
+            type="text"
+            name="building_id"
+            class="form-control"
+            id="building_id"
+            placeholder="1144012500105950000018063"
+          />
+        </div>
+
+        <input type="file" class="form-control" name="file" required />
+        <input
+          id="btn_upload_object"
+          disabled
+          type="submit"
+          class="btn_upload my-1"
+          value="업로드"
+        />
+      </form>
+    </div>
+
+    <div class="list-group-item">
+      <div class="table-responsive">
+        <table class="table table-sm text-nowrap">
+          <thead class="table-light">
+            <tr class="thead-dark">
+              <th>번호</th>
+              <th>건물 아이디</th>
+              <th>파일명</th>
+              <th>등록일시</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% if object_list %} {% for object in object_list %}
+            <tr>
+              <!-- <td>{{ loop.index }}</td> -->
+              <td>{{ object.id }}</td>
+              <td>{{ object.building_id }}</td>
+              <!-- <td>{{ object.file_name }}</td> -->
+              <td>
+                <a
+                  href="{{ url_for('upload.download_file', name=object.file_name) }}"
+                  >{{ object.file_name }}</a
+                >
+              </td>
+              <td>{{ object.create_date }}</td>
+              <td>
+                <form
+                  method="post"
+                  class="form-inline"
+                  action="{{ url_for('upload.delete_object', building_id=object.id) }}"
+                  enctype="multipart/form-data"
+                >
+                  <button
+                    type="submit"
+                    class="btn btn-sm btn-danger delete-object"
+                  >
+                    삭제
+                  </button>
+                </form>
+              </td>
+            </tr>
+            {% endfor %} {% else %}
+            <tr>
+              <td colspan="5" class="text-center">자료가 없습니다.</td>
+            </tr>
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- </div> -->
+{% endblock %}

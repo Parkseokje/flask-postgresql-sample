@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "flask-postgresql-sample"
+version = "0.1.0"
+description = ""
+authors = ["SeokjePark <molla4455@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+Flask = "^2.0.2"
+psycopg2-binary = "^2.9.1"
+Flask-SQLAlchemy = "^2.5.1"
+Flask-Migrate = "^3.1.0"
+Flask-WTF = "^0.15.1"
+flask-marshmallow = "^0.14.0"
+marshmallow-sqlalchemy = "^0.26.1"
+flask-restplus = "^0.13.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
